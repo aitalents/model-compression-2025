@@ -204,4 +204,4 @@
         ДЗ: Оптимизировать модели и улучшить метрики производительности в финальном проекте, создав Pull Request.
 
 ### Презентации
-[Занятие 1 Введение](https://link)
+[Занятие 1 Введение](https://docs.google.com/presentation/d/1_Q0bhbvD9wJl_KJm-ixDExSrd_fKHefengdE_XWtS0M/edit?usp=sharing)
