@@ -44,41 +44,44 @@ def get_dir_size_mb(path):
 
 
 def evaluate_model(model, dataset, processor, device: torch.device):
-    timings = []
     predictions, references = [], []
 
+    if device.type == "cuda":
+        torch.cuda.reset_peak_memory_stats()
+
     start_ram = get_ram_usage_mb()
-    start_vram = get_vram_usage_mb()
+
+    if device.type == "cuda":
+        torch.cuda.synchronize()
+    start_time = time.time()
 
     for example in dataset:
         inputs = preprocess_input(example, processor, device)
         references.append(example["labels"])
 
-        if device.type == "cuda":
-            torch.cuda.synchronize()
-            start = time.time()
-            with torch.no_grad():
-                output = model(**inputs)
-            torch.cuda.synchronize()
-        else:
-            start = time.time()
-            with torch.no_grad():
-                output = model(**inputs)
-        end = time.time()
+        with torch.no_grad():
+            output = model(**inputs)
 
-        timings.append((end - start) * 1000)
         predictions.append(output.logits.argmax(-1).item())
 
+    if device.type == "cuda":
+        torch.cuda.synchronize()
+    end_time = time.time()
+
+    total_inference_time = (end_time - start_time) * 1000
+
     end_ram = get_ram_usage_mb()
-    end_vram = get_vram_usage_mb()
+    peak_vram = torch.cuda.max_memory_allocated() / 1024**2 if device.type == "cuda" else 0
 
     return {
-        f"{device.type}_time": np.mean(timings),
-        "ram_usage": end_ram - start_ram,
-        "vram_usage": end_vram - start_vram if device.type == "cuda" else 0,
+        f"{device.type}_inference_time_ms": total_inference_time,
+        "peak_ram_usage": end_ram - start_ram,
+        "peak_vram_usage": peak_vram,
         "predictions": predictions,
         "references": references
     }
+
+
 
 
 def main():
