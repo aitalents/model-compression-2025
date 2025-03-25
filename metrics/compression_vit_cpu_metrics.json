@@ -1,7 +1,7 @@
 {
-  "cpu_inference_time_ms": 37117.7773475647,
-  "peak_ram_usage": 368.83203125,
-  "peak_vram_usage": 0,
-  "accuracy": 0.3203125,
+  "cpu_time": 285.2535080164671,
+  "ram_usage": 368.015625,
+  "vram_usage": 0,
+  "accuracy": 0.3125,
   "weights_size": 327.3244228363037
 }

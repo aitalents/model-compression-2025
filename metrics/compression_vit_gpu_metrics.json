@@ -1,7 +1,7 @@
 {
-  "cuda_inference_time_ms": 1415.1756763458252,
-  "peak_ram_usage": 204.67578125,
-  "peak_vram_usage": 344.1298828125,
-  "accuracy": 0.3984375,
+  "cuda_time": 6.27807155251503,
+  "ram_usage": 203.0625,
+  "vram_usage": 344.1298828125,
+  "accuracy": 0.328125,
   "weights_size": 327.3244228363037
 }
