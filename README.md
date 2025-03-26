@@ -69,5 +69,8 @@
 | FishSpeech| Оригинал | 1280 Mb   | 0.42+-0.0005 | 11.46+-0.58 | 1560Mb | 1560Mb | NISQA-NOI: 1.29+-0.13</br>NISQA-COL: 2.57+-0.13</br>NISQA-DISC: 2.32+-0.18</br>NISQA-LOUD: 1.73+-0.09</br>NISQA-MOS: 2.25+-0.08</br>NISQA-AVG: 2.25+-0.08</br>WER: 0.031+-0.028 |
 
 
+![Metrics barplot](metrics.jpg)
+
+
 ### Презентации
 [Занятие 1 Введение](https://docs.google.com/presentation/d/1_Q0bhbvD9wJl_KJm-ixDExSrd_fKHefengdE_XWtS0M/edit?usp=sharing)
