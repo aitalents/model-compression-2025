@@ -42,7 +42,8 @@
 | Модель    |    Метод    | Размер весов | Время инференса (CPU, ms) | Время инференса (GPU, ms) | Использование RAM (MB) | Использование VRAM (MB) |  Качество (Precision, Recall, F1-Score))  |
 | :-------------- | :--------------: | :---------------------: | :-------------------------------------: | :-------------------------------------: | :---------------------------------: | :----------------------------------: | :-----------------------------------------------: |
 | efficientvit_b3 | Оригинал |        185.75Mb        |               113.27 ms               |                21.26 ms                |              764.75 MB              |              539.00 Mb              | 0.8474 precision 0.8342 recall 0.8239 f1-score |
-| efficientvit_b3 | Clustering (32 clusters) |        37.11Mb        |               106.4 ms               |                21.8 ms                |              764.75 MB              |              539.00 Mb              | 0.8474 precision 0.8342 recall 0.8239 f1-score |
-
+| efficientvit_b3 | TorchScript |        185.75Mb        |               100.95 ms               |                15.92 ms                |              99.5 MB              |              537.00 Mb              | 0.8474 precision 0.8342 recall 0.8239 f1-score |
+| efficientvit_b3 | ONNX |        185.75Mb        |               74.61 ms               |                19.50 ms                |              185.56 MB              |              278 Mb              | 0.8474 precision 0.8342 recall 0.8239 f1-score |
+| efficientvit_b3 | OpenVINO |        186.31Mb        |               50.52 ms               |                ---                |              391.25 MB              |              ---              | 0.8474 precision 0.8342 recall 0.8239 f1-score |
 
 
