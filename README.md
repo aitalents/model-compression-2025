@@ -50,3 +50,5 @@
 | efficientvit_b3 | Оригинал |        185.75Mb        |               113.27 ms               |                21.26 ms                |              764.75 MB              |              539.00 Mb              | 0.8474 precision 0.8342 recall 0.8239 f1-score |
 | efficientvit_b3 | Clustering (32 clusters) |        37.11Mb        |               106.4 ms               |                21.8 ms                |              764.75 MB              |              539.00 Mb              | 0.8474 precision 0.8342 recall 0.8239 f1-score |
 
+
+
