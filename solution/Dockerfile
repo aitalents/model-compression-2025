@@ -12,6 +12,8 @@ RUN apt-get update && apt upgrade -y && \
 		pip install -U pip setuptools && \
 		pip install -U --no-cache-dir -r requirements.txt
 
+RUN pip install --no-cache-dir onnxruntime-gpu==1.15.1
+
 COPY . $WORKDIR
 
 ENTRYPOINT [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1" ]

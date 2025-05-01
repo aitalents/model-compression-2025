@@ -1,11 +1,17 @@
 from abc import ABC, abstractmethod
-from collections.abc import Callable
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict
 
 import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+from transformers import AutoTokenizer
 
+try:
+    import optimum.onnxruntime.utils as _ort_utils
+    _ort_utils.validate_provider_availability = lambda provider: None
+except ImportError:
+    pass
+
+from optimum.onnxruntime import ORTModelForSequenceClassification
 
 @dataclass
 class TextClassificationModelData:
@@ -13,61 +19,66 @@ class TextClassificationModelData:
     label: str
     score: float
 
-
 class BaseTextClassificationModel(ABC):
-
-    def __init__(self, name: str, model_path: str, tokenizer: str):
+    """
+    Abstract base class for text classification models.
+    """
+    def __init__(self, name: str, model_path: str, tokenizer_name: str):
         self.name = name
         self.model_path = model_path
-        self.tokenizer = tokenizer
-        self.device = 0 if torch.cuda.is_available() else "cpu"
+        self.tokenizer_name = tokenizer_name
+        assert torch.cuda.is_available(), "CUDA is not available, GPU execution required"
+        self.device = torch.device("cuda:0")
         self._load_model()
 
     @abstractmethod
     def _load_model(self):
-        ...
+        pass
 
     @abstractmethod
-    def __call__(self, inputs) -> List[TextClassificationModelData]:
-        ...
+    def tokenize_texts(self, texts: List[str]) -> Dict[str, torch.Tensor]:
+        pass
 
+    @abstractmethod
+    def __call__(self, inputs: Dict[str, torch.Tensor]) -> List[TextClassificationModelData]:
+        pass
 
 class TransformerTextClassificationModel(BaseTextClassificationModel):
 
     def _load_model(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer)
-        self.model = AutoModelForSequenceClassification.from_pretrained(self.model_path)
-        self.model = self.model.to(self.device)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name)
+        self.model = ORTModelForSequenceClassification.from_pretrained(
+            self.model_path,
+            export=True,
+            provider="CUDAExecutionProvider",
+            use_io_binding=True
+        )
 
-    def tokenize_texts(self, texts: List[str]):
-        inputs = self.tokenizer.batch_encode_plus(
-                texts,
-                add_special_tokens=True,
-                padding='longest',
-                truncation=True,
-                return_token_type_ids=True,
-                return_tensors='pt'
-                )
-        inputs = {k: v.to(self.device) for k, v in inputs.items()}  # Move inputs to GPU
+    def tokenize_texts(self, texts: List[str]) -> Dict[str, torch.Tensor]:
+        inputs = self.tokenizer(
+            texts,
+            padding=True,
+            truncation=True,
+            return_tensors="pt"
+        )
+        for key, tensor in inputs.items():
+            inputs[key] = tensor.to(self.device)
         return inputs
 
-    def _results_from_logits(self, logits: torch.Tensor):
+    def __call__(self, inputs: Dict[str, torch.Tensor]) -> List[TextClassificationModelData]:
+        outputs = self.model(**inputs)
+        logits = outputs.logits
+        probs = torch.softmax(logits, dim=-1)
+        pred_ids = torch.argmax(probs, dim=-1)
         id2label = self.model.config.id2label
-
-        label_ids = logits.argmax(dim=1)
-        scores = logits.softmax(dim=-1)
-        results = [
-                {
-                    "label": id2label[label_id.item()],
-                    "score": score[label_id.item()].item()
-                }
-                for label_id, score in zip(label_ids, scores)
-            ]
+        results: List[TextClassificationModelData] = []
+        for idx, label_id in enumerate(pred_ids):
+            lid = label_id.item()
+            results.append(
+                TextClassificationModelData(
+                    model_name=self.name,
+                    label=id2label[lid],
+                    score=probs[idx, lid].item()
+                )
+            )
         return results
-
-    def __call__(self, inputs) -> List[TextClassificationModelData]:
-        logits = self.model(**inputs).logits
-        predictions = self._results_from_logits(logits)
-        predictions = [TextClassificationModelData(self.name, **prediction) for prediction in predictions]
-        return predictions
-
