@@ -18,5 +18,13 @@ https://docs.google.com/presentation/d/1SuKmMIwmccECF7T_TFMFR5BCiy4OzdpBr1uKcO6e
         Практика - Рассмотрим примеры и способы компрессии моделей с применением фреймворка Optimum от Huggingface
         ДЗ: Применить к своим моделям и замерить производительность
 
+
+
+### Таблица сравнения методов компрессии моделей
+| Модель | Метод | Размер весов | Время инференса (CPU) | Время инференса (GPU, seconds/text) | Использование RAM (MB) | Использование VRAM (MB) | Точность 
+| :---   | :----: | :----: | :----: | :----: | :----: | :----: | :----: | 
+| rubert-base-cased | Оригинал | 711Mb | - | 0.014 | - | 800Mb | 0.53 | 
+| rubert-base-cased | ONNX | 711Mb | - | 0.01 | - | 800Mb | 0.53 | 
+
 ### Презентации
 [Занятие 6 Обзор Фреймворков](https://docs.google.com/presentation/d/1SuKmMIwmccECF7T_TFMFR5BCiy4OzdpBr1uKcO6eGIY/edit?usp=sharing)
