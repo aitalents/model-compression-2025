@@ -1,0 +1,9 @@
+torch
+psutil
+numpy
+tqdm
+scikit-learn
+transformers
+datasets
+librosa
+evaluate
