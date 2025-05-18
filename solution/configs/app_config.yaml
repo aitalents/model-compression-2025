@@ -1,0 +1,22 @@
+models:
+  - model: "cardiffnlp"
+    model_path: "twitter_xlm_roberta_base_sentiment_onnx_quantized"
+    tokenizer: "twitter_xlm_roberta_base_sentiment_onnx_quantized"
+  - model: "ivanlau"
+    model_path: "twitter_xlm_roberta_base_sentiment_onnx_quantized"
+    tokenizer: "twitter_xlm_roberta_base_sentiment_onnx_quantized"
+  - model: "svalabs"
+    model_path: "twitter_xlm_roberta_crypto_spam_onnx_quantized"
+    tokenizer: "twitter_xlm_roberta_crypto_spam_onnx_quantized"
+  - model: "EIStakovskii"
+    model_path: "xlm_roberta_base_multilingual_toxicity_classifier_plus_onnx_quantized"
+    tokenizer: "xlm_roberta_base_multilingual_toxicity_classifier_plus_onnx_quantized"
+  - model: "jy46604790"
+    model_path: "fake_news_bert_detect_onnx_quantized"
+    tokenizer: "fake_news_bert_detect_onnx_quantized"
+
+port: 8080
+workers: 1
+
+timeout: 0.01
+
