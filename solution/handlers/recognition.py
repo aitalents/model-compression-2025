@@ -41,13 +41,22 @@ class PredictionHandler:
                             await rq.put(out)
 
     def serialize_answer(self, results: List[TextClassificationModelData]) -> ResponseSchema:
-        res_model = {rec.model_name: self._recognitions_to_schema(rec) for rec in results}
+        # res_model = {rec.model_name: self._recognitions_to_schema(rec) for rec in results}
+        res_model = {}
+        for rec in results:
+            # находим соответствующую модель и берём её метрики
+            metrics = next(
+                (m.get_metrics() for m in self.recognition_service.service_models if m.name == rec.model_name),
+                {}
+            )
+            schema = self._recognitions_to_schema(rec, metrics)
+            res_model[rec.model_name] = schema
         return ResponseSchema(**res_model)
 
-    def _recognitions_to_schema(self, recognition: TextClassificationModelData) -> RecognitionSchema:
+    def _recognitions_to_schema(self, recognition: TextClassificationModelData, metrics: dict) -> RecognitionSchema:
         if recognition.model_name != "ivanlau":
             recognition.label = recognition.label.upper()
-        return RecognitionSchema(score=recognition.score, label=recognition.label)
+        return RecognitionSchema(score=recognition.score, label=recognition.label, metrics=metrics)
 
     def _perform_batches(self, texts: List[str], max_batch_size):
         for i in range(0, len(texts), max_batch_size):
