@@ -7,19 +7,6 @@
 
 ## Метрики производительности
 
-| type | model |  | score | label | model_total_parameters | model_nonzero_parameters | model_zero_parameters | model_sparsity | model_memory_size_bytes | model_disk_size_bytes | last_inference_time_sec |
-|----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|------------|-------------|-------------|
-| non-optimized | cardiffnlp  | 0.89  | POSITIVE  | 278045955  | 278045187  | 768  | 0.0  | 1112183820  | 1112263328  | 0.19   |
-| optimized     | cardiffnlp        | 0.85        | POSITIVE        | 278045955     | 260939825       | 17106130        | 0.06        | 1112183820        | 1112263392        | 0.14         |
-| non-optimized | ivanlau  | 0.99  | English  | 278078253  | 278077456  | 797  | 0.0  | 1112313012  | 1112392480  | 0.13   |
-| optimized     | ivanlau        | 0.99        | English        | 278078253        | 260965643        | 17112610        | 0.06        | 1112313012        | 1112392544        | 0.13         |
-| non-optimized | svalabs  | 0.82  | HAM  | 278045186  | 278044418  | 768  | 0.0  | 1112180744  | 1112260256  | 0.13   |
-| optimized     | svalabs        | 0.70        | HAM        | 278045186        | 260939210        | 17105976       | 0.06        | 1112180744       | 1112260320        | 0.12        |
-| non-optimized | EIStakovskii  | 0.78  | LABEL_1  | 278045186  | 278044387  | 799  | 0.0  | 1112180744  | 1112260256  | 0.12   |
-| optimized     | EIStakovskii        | 0.77        | LABEL_0        | 278045186        | 260939179        | 17106007        | 0.06        | 1112180744        | 1112260320        | 0.11         |
-| non-optimized | jy46604790  | 0.99  | LABEL_0  | 124647170  | 124646395  | 775  | 0.0  | 498588680  | 498668192  | 0.12   |
-| optimized     | jy46604790        | 0.99      | LABEL_0        | 124647170        | 107541187        | 17105983        | 0.14        | 498588680        | 498668256        | 0.12         |
-
 | type           | model         | score | label     | model_total_parameters | model_nonzero_parameters | model_zero_parameters | model_sparsity | model_memory_size_bytes | model_disk_size_bytes | last_inference_time_sec |
 |----------------|---------------|-------|-----------|------------------------|---------------------------|------------------------|----------------|--------------------------|------------------------|--------------------------|
 | non-optimized  | cardiffnlp    | 0.89  | POSITIVE  | 278045955              | 278045187                 | 768                    | 0.0            | 1112183820               | 1112263328             | 0.19                     |
