@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from typing import List
 
 import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from optimum.onnxruntime import ORTModelForSequenceClassification
 
 
 @dataclass
@@ -45,7 +46,7 @@ class TransformerTextClassificationModel(BaseTextClassificationModel):
                 add_special_tokens=True,
                 padding='longest',
                 truncation=True,
-                return_token_type_ids=True,
+                return_token_type_ids=False,
                 return_tensors='pt'
                 )
         inputs = {k: v.to(self.device) for k, v in inputs.items()}  # Move inputs to GPU
@@ -71,3 +72,10 @@ class TransformerTextClassificationModel(BaseTextClassificationModel):
         predictions = [TextClassificationModelData(self.name, **prediction) for prediction in predictions]
         return predictions
 
+class OptimizedTransformerTextClassificationModel(TransformerTextClassificationModel):
+    def _load_model(self):
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer)
+        self.model = ORTModelForSequenceClassification.from_pretrained(
+            self.model_path, export=True
+        )
+        self.model = self.model.to(self.device)
