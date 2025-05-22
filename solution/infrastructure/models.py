@@ -44,13 +44,13 @@ class TransformerTextClassificationModel(BaseTextClassificationModel):
         #self.model = AutoModelForSequenceClassification.from_pretrained(self.model_path)
         self.model = ORTModelForSequenceClassification.from_pretrained(self.model_path, export=True)
         self.model = self.model.to(self.device)
-        self.quantizer = ORTQuantizer.from_pretrained(self.model)
-        self.qconfig = AutoQuantizationConfig.arm64(is_static=True, per_channel=False)
+        #self.quantizer = ORTQuantizer.from_pretrained(self.model)
+        #self.qconfig = AutoQuantizationConfig.arm64(is_static=True, per_channel=False)
         
-        def preprocess_fn(ex, tokenizer):
-            return tokenizer(ex["sentence"])
+        #def preprocess_fn(ex, tokenizer):
+        #    return tokenizer(ex["sentence"])
 
-        calibration_dataset = self.quantizer.get_calibration_dataset(
+        '''calibration_dataset = self.quantizer.get_calibration_dataset(
             "glue",
             dataset_config_name="sst2",
             preprocess_function=partial(preprocess_fn, tokenizer=self.tokenizer),
@@ -73,7 +73,7 @@ class TransformerTextClassificationModel(BaseTextClassificationModel):
             save_dir="infrastructure",
             calibration_tensors_range=ranges,
             quantization_config=self.qconfig,
-        )
+        )'''
 
     def tokenize_texts(self, texts: List[str]):
         inputs = self.tokenizer.batch_encode_plus(
@@ -81,7 +81,7 @@ class TransformerTextClassificationModel(BaseTextClassificationModel):
                 add_special_tokens=True,
                 padding='longest',
                 truncation=True,
-                return_token_type_ids=True,
+                return_token_type_ids=False,
                 return_tensors='pt'
                 )
         inputs = {k: v.to(self.device) for k, v in inputs.items()}  # Move inputs to GPU
