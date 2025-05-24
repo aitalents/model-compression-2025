@@ -6,6 +6,8 @@ from typing import List
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 from optimum.onnxruntime import ORTModelForSequenceClassification
+import os
+from pathlib import Path
 
 
 @dataclass
@@ -36,8 +38,10 @@ class BaseTextClassificationModel(ABC):
 class TransformerTextClassificationModel(BaseTextClassificationModel):
 
     def _load_model(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer)
-        self.model = ORTModelForSequenceClassification.from_pretrained(self.model_path)
+        base_dir = Path(os.getenv("MODELS_DIR", "/models"))
+        model_dir = base_dir / self.model_path
+        self.tokenizer = AutoTokenizer.from_pretrained(model_dir)
+        self.model = ORTModelForSequenceClassification.from_pretrained(model_dir)
         self.model = self.model.to(self.device)
 
     def tokenize_texts(self, texts: List[str]):

@@ -13,22 +13,10 @@ cd solution
 docker buildx build --platform linux/amd64 --load -t lesson-7 .
 ```
 
-Для получения новых весов моделей используйте:
-
-```bash
-bash quant_models.sh
-```
-
-или для скачивания моделей с google drive
-
-```bash
-bash down_models.sh
-```
-
 Запуск проекта:
 
 ```bash
-docker run -ti -p 8080:8080 -v $PWD/:/src lesson-7:latestdocker run -ti -p 8080:8080 -v $PWD/:/src lesson-7:latest
+docker run -ti -p 8080:8080 -v $PWD/:/src lesson-7:latest
 ```
 
 Работа моделей до оптимизации:    
