@@ -1,7 +1,7 @@
 optimum[onnxruntime-gpu]==1.13.2
 onnxruntime-gpu==1.16.3
 fastapi[all]==0.95.1
-onnxruntime-gpu==1.15.1
+#onnxruntime-gpu==1.15.1
 uvicorn==0.22.0
 numpy==1.23.5
 pydantic==1.10.7
