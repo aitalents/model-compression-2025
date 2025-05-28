@@ -3,6 +3,7 @@
 # Вывод
 
 Model = openai/whisper-base
+
 inference device = CPU
 
 | optimization_level     | Average Inference Time (s) | WER (%) | RAM Usage (MB) | Model Size (MB) |
