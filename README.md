@@ -1,8 +1,17 @@
 # model-compression-2025
 
 # Вывод
-1. до оптимизации и после Accuracy score одинаковый
-2. время обработки 100 запросов до и после оптимизации соответственно: 3.238 с и 2.042 с
+
+Model = openai/whisper-base
+inference device = CPU
+
+| optimization_level     | Average Inference Time (s) | WER (%) | RAM Usage (MB) | Model Size (MB) |
+|------------------------|----------------------------|---------|----------------|-----------------|
+| optimization_level=0   | 7.15                       | 19.23%  | 10482.39 MB    | 666.22 MB       |
+| optimization_level=1   | 6.69                       | 19.23%  |  9564.21 MB    | 666.12 MB       |
+| optimization_level=2   | 6.25                       | 19.23%  |  9311.27 MB    | 666.12 MB       |
+| optimization_level=99  | 5.95                       | 19.23%  |  7598.21 MB    | 666.12 MB       |
+
 
 
 Репозиторий курса по сжатию и ускорению моделей машинного обучения.
