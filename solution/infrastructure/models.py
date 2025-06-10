@@ -23,7 +23,7 @@ class BaseTextClassificationModel(ABC):
         self.name = name
         self.model_path = model_path
         self.tokenizer = tokenizer
-        self.device = 0 if torch.cuda.is_available() else "cpu"
+        self.device = "cpu"
         self._load_model()
 
     @abstractmethod
@@ -40,8 +40,8 @@ class TransformerTextClassificationModel(BaseTextClassificationModel):
     def _load_model(self):
         base_dir = Path(os.getenv("MODELS_DIR", "/models"))
         model_dir = base_dir / self.model_path
-        self.tokenizer = AutoTokenizer.from_pretrained(model_dir)
-        self.model = ORTModelForSequenceClassification.from_pretrained(model_dir)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_dir, max_length=512, truncation=True)
+        self.model = ORTModelForSequenceClassification.from_pretrained(model_dir, provider='CPUExecutionProvider')
         self.model = self.model.to(self.device)
 
     def tokenize_texts(self, texts: List[str]):
@@ -50,6 +50,7 @@ class TransformerTextClassificationModel(BaseTextClassificationModel):
                 add_special_tokens=True,
                 padding='longest',
                 truncation=True,
+                max_length=512,
                 return_token_type_ids=True,
                 return_tensors='pt'
                 )
